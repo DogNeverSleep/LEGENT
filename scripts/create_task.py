@@ -9,24 +9,34 @@ import os
 from scripts.gpt_api import get_response_new, get_response_4v
 
 
-save_folder = f"{os.getcwd()}/photo_views"
+save_folder = f"{os.getcwd()}/test_dataset"  # 测试数据集路径
 os.makedirs(save_folder, exist_ok=True)
+
 env = Environment(env_path="auto")
 
+scene_num = 1  # 生成场景数量
+
 try:
-    for i in range(10):
-        absolute_path = f"{save_folder}/{i:04d}.png"
-        print(f"save photo of scene {i} to {absolute_path}")
+    for i in range(scene_num):
+        # absolute_path = f"{save_folder}/{i:04d}.png"
+        absolute_path = f"{save_folder}/{scene_num:04d}"
+        os.makedirs(absolute_path, exist_ok=True)
+
         scene = generate_scene(room_num=1)
-        position = scene["agent"]["position"].copy()
+        print(f"\n\nscene {i} generated\n\n")
+
+        position = scene["agent"]["position"].copy()  # 位置
         position[1] += 1
-        rotation = scene["agent"]["rotation"]
+
+        rotation = scene["agent"]["rotation"]  # 角度
+
+        photo_path = f"{absolute_path}/photo.png"
         obs = env.reset(
             ResetInfo(
                 scene,
                 api_calls=[
                     TakePhotoWithVisiblityInfo(
-                        absolute_path,
+                        photo_path,
                         position,
                         rotation,
                         width=4096,
@@ -44,25 +54,7 @@ try:
         ]
         print(obs.api_returns)
         print(visible_objects)
-        store_json(visible_objects, f"{save_folder}/{i:04d}.json")
 
-        # save segmentation image
-        absolute_path = f"{save_folder}/{i:04d}.seg.png"
-        obs = env.reset(
-            ResetInfo(
-                scene,
-                api_calls=[
-                    TakePhotoWithVisiblityInfo(
-                        absolute_path,
-                        position,
-                        rotation,
-                        width=4096,
-                        height=4096,
-                        vertical_field_of_view=90,
-                        rendering_type="segmentation",
-                    )
-                ],
-            )
-        )
+        store_json(visible_objects, f"{absolute_path}/visible_objects.json")
 finally:
     env.close()
