@@ -173,3 +173,5 @@ docs/*.svg
 docs/**/index.md
 
 !legent/dataset/task-prompts.json
+TASK
+scripts/gpt_api.py
