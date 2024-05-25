@@ -18,8 +18,7 @@ scene_num = 1  # 生成场景数量
 
 try:
     for i in range(scene_num):
-        # absolute_path = f"{save_folder}/{i:04d}.png"
-        absolute_path = f"{save_folder}/{scene_num:04d}"
+        absolute_path = f"{save_folder}/{scene_num:04d}"  # 当前文件夹路径
         os.makedirs(absolute_path, exist_ok=True)
 
         scene = generate_scene(room_num=1)
@@ -30,7 +29,7 @@ try:
 
         rotation = scene["agent"]["rotation"]  # 角度
 
-        photo_path = f"{absolute_path}/photo.png"
+        photo_path = f"{absolute_path}/photo.png"  # 图片路径
         obs = env.reset(
             ResetInfo(
                 scene,
@@ -52,8 +51,8 @@ try:
             scene["instances"][object_id]["prefab"]
             for object_id in obs.api_returns["objects_in_view"]
         ]
-        print(obs.api_returns)
-        print(visible_objects)
+        print("api_returns:\n", obs.api_returns)
+        print("visible_objects:\n", visible_objects)
 
         store_json(visible_objects, f"{absolute_path}/visible_objects.json")
 finally:
