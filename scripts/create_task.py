@@ -16,7 +16,7 @@ os.makedirs(save_folder, exist_ok=True)
 
 env = Environment(env_path="auto")
 
-scene_num = 1  # 生成场景数量
+scene_num = 3  # 生成场景数量
 
 try:
     for i in range(scene_num):
