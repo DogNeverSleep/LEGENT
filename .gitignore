@@ -176,3 +176,4 @@ docs/**/index.md
 scripts/gpt_api.py
 test_dataset/
 scene_test/
+.DS_Store
