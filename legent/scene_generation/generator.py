@@ -720,8 +720,8 @@ class HouseGenerator:
         prefabs = odb.PREFABS
         room_spec = self.room_spec
 
-        log("starting...")
-        log(room_spec)
+        # log("starting...")
+        # log(room_spec)
 
         house_structure = self.generate_structure(room_spec=room_spec)
         interior_boundary = house_structure.interior_boundary

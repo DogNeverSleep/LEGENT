@@ -175,3 +175,4 @@ docs/**/index.md
 !legent/dataset/task-prompts.json
 scripts/gpt_api.py
 test_dataset/
+scene_test/
