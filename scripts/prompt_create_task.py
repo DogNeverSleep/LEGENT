@@ -18,7 +18,7 @@ def scene_to_description(file_path, scene_object_info, ego_object_info):
 
     scene_description = get_response_4v(photo_path, prompt, local=True)
 
-    print("\n\n" + prompt + "\n\n")
+    # print("\n\n" + prompt + "\n\n")
 
     return scene_description
 
@@ -66,9 +66,10 @@ def description_to_task(scene_description, scene_object_info):
     prompt += "Note that as a robot assistant, you only have visual abilities and no tactile, hearing or other abilities. Therefore, you can only see the color, size, shape and other information of the cushions, but cannot judge whether the cushions are soft or new or old. \n"
     prompt += "After you generate a task, use diverse language but be precise in your description. For example: Tell me the number of the green vases; Please go to the green cushion. \n"
     prompt += "Please follow the following format for your answer: \n"
-    prompt += "TASK:go to the red cushion. \n"
-    prompt += "TASK:tell me the number of the cups on the table. \n"
+    prompt += "Template:Go to {object}. Task:go to the red cushion. \n"
+    prompt += "Template:Count the number of {object}. Task:tell me the number of the cups on the table. \n"
+    prompt += "Template:What is the color of {object}? Task:Tell me the color of the vase on the shelf. \n"
 
-    print("\n\n" + prompt + "\n\n")
+    # print("\n\n" + prompt + "\n\n")
 
     return get_response_new(prompt)

@@ -16,7 +16,7 @@ os.makedirs(save_folder, exist_ok=True)
 
 env = Environment(env_path="auto")
 
-scene_num = 3  # 生成场景数量
+scene_num = 10  # 生成场景数量
 
 try:
     for i in range(scene_num):
@@ -73,7 +73,7 @@ try:
         scene_description = scene_to_description(
             absolute_path, scene_object_info, ego_object_info
         )  # 场景描述
-        print("\n\n" + scene_description + "\n\n")
+        # print("\n\n" + scene_description + "\n\n")
 
         print("\n\nstart to generate task\n\n")
         tasks = description_to_task(scene_description, scene_object_info)

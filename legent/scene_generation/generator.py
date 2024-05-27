@@ -438,8 +438,8 @@ class HouseGenerator:
         anchor_type: str,
         anchor_delta: int,
         odb: ObjectDB,
-        spawnable_assets, # pd.DataFrame
-        spawnable_asset_groups, # pd.DataFrame
+        spawnable_assets,  # pd.DataFrame
+        spawnable_asset_groups,  # pd.DataFrame
         priority_asset_types: List[str],
     ):
         set_rotated = None
@@ -642,7 +642,7 @@ class HouseGenerator:
 
             data.append(group_data)
 
-        return pd.DataFrame(data) 
+        return pd.DataFrame(data)
 
     def prefab_fit_rectangle(self, prefab_size, rectangle):
         x0, z0, x1, z1 = rectangle
@@ -1143,13 +1143,15 @@ class HouseGenerator:
             z_center = sum([z for _, z in polygon]) / len(polygon)
             x_size = max([x for x, _ in polygon]) - min([x for x, _ in polygon])
             z_size = max([z for _, z in polygon]) - min([z for _, z in polygon])
-            room_polygon.append({
-                'room_id':id,
-                'room_type': room.room_type,
-                'position': [x_center, 1.5, z_center],
-                'size': [x_size,3, z_size],
-                'polygon':polygon
-            })
+            room_polygon.append(
+                {
+                    "room_id": id,
+                    "room_type": room.room_type,
+                    "position": [x_center, 1.5, z_center],
+                    "size": [x_size, 3, z_size],
+                    "polygon": polygon,
+                }
+            )
             # print(f'room {id} polygon: {polygon}')
 
         infos = {
