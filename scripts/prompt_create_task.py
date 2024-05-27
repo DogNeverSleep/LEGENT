@@ -44,7 +44,7 @@ def description_to_task(scene_description, scene_object_info):
     prompt += "6.Identify all the {color} objects in the room. Where color is a specific color. \n"
     prompt += "7.Where is {object}? Where object is a specific object in the scene. \n"
     prompt += "8.Go to {object}. Where object is a specific object in the scene. \n"
-    prompt += "9.Move {object} to {position}. Where position is a specific location in the scene, such as on the table. \n"
+    prompt += "9.Move {object} to another room. Where object is a specific object in the scene. \n"
     prompt += "10.Move {object1} closer/further to {object2}. Where object1 and object2 are specific objects in the scene. \n"
     prompt += "11.Put {object1} on the {object2}. Where object1 and object2 are specific objects in the scene. \n"
     prompt += "12.Pick up {object}. Where object is a specific object in the scene. \n"
