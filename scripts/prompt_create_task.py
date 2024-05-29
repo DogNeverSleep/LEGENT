@@ -7,8 +7,8 @@ def scene_to_description(file_path, scene_object_info, ego_object_info=None):
     prompt = ""
     prompt += "Imagine you are an embodied robotic assistant and you are in a virtual cartoon-style indoor scene. \n"
     prompt += "Taking into account the uncertainty of language description, it is clearly stated that there are a total of the following objects in the entire scene: \n"
-    for index, category in scene_object_info.items():
-        prompt += f"object number:{index},object category:{category}. \n"
+    for index, info in scene_object_info.items():
+        prompt += f"object number:{index}, object name:{info[0]}, object description:{info[1]}. \n"
     prompt += "These four images are from your first perspective of the scene, and the first image is from your front. \n"
     prompt += "Please combine these four images with the object information in the scene I gave you, and use natural language to describe the scene in detail for me, especially the characteristics of the objects in the scene (color, shape, etc.) and the spatial position of the objects. \n"
     prompt += "Examples are as follows: \n"
@@ -29,8 +29,8 @@ def description_to_task(scene_description, scene_object_info):
     prompt += scene_description
     prompt += " \n"
     prompt += "Taking into account the uncertainty of language description, it is clearly stated that there are a total of the following objects in the entire scene: \n"
-    for index, category in scene_object_info.items():
-        prompt += f"object number:{index},object category:{category}. \n"
+    for index, info in scene_object_info.items():
+        prompt += f"object number:{index}, object name:{info[0]}, object description:{info[1]}. \n"
     prompt += "You need to help me complete a series of tasks. The task template is as follows: \n"
     prompt += "1.Is there a {object} in the scene? Where object is a specific object in the scene. \n"
     prompt += "2.What is the name of the object {postion}? Where position is a specific location in the scene, such as on the table. \n"
@@ -59,7 +59,8 @@ def description_to_task(scene_description, scene_object_info):
     prompt += "23.Which room has the most {object}? Where object is a type of object in the scene. \n"
     prompt += "24.Compare the sizes of {object1} and {object2}. Where object1 and object2 are specific objects in the scene. \n"
     prompt += "If there are multiple objects of the same type or similar types in the scene, then when constructing the task, you need to clearly and unambiguously state which vase the object in the task refers to. This can be referred to by the characteristics of the object itself, such as color, shape, or by its spatial position in the scene.  If there are three vases in a scene, then the task at this time can be structured as: go to {the vase on the edge of the table}, or: go to {the green round vase}. \n"
-    prompt += "Please combine scene and object information to generate a series of tasks based on the task template, for example: go to the chair farthest from me, count the number of the yellow vases. \n"
+    prompt += "Please combine scene and object information i give you to generate a series of tasks based on the task template, for example: go to the chair farthest from me, count the number of the yellow vases. \n"
+    prompt += "Note that when generating tasks, you can only use the objects I gave you numbers above. \n"
     prompt += "Please generate a corresponding task based on each template. The tasks must comply with common sense and rules to avoid tasks such as pick up the bed. \n"
     prompt += "Note that as a robot assistant, you only have visual abilities and no tactile, hearing or other abilities. Therefore, you can only see the color, size, shape and other information of the cushions, but cannot judge whether the cushions are soft or new or old. \n"
     prompt += "After you generate a task, use diverse language but be precise in your description. For example: Tell me the number of the green vases; Please go to the green cushion. \n"
@@ -80,8 +81,8 @@ def description_to_task_QA(scene_description, scene_object_info):
     prompt += scene_description
     prompt += " \n"
     prompt += "Taking into account the uncertainty of language description, it is clearly stated that there are a total of the following objects in the entire scene: \n"
-    for index, category in scene_object_info.items():
-        prompt += f"object number:{index},object category:{category}. \n"
+    for index, info in scene_object_info.items():
+        prompt += f"object number:{index}, object name:{info[0]}, object description:{info[1]}. \n"
     prompt += "You need to help me complete a series of tasks. The task template is as follows: \n"
     prompt += "1.Is there a {object} in the scene? Where object is a specific object in the scene. \n"
     prompt += "2.What is the name of the object {postion}? Where position is a specific location in the scene, such as on the table. \n"
@@ -101,17 +102,18 @@ def description_to_task_QA(scene_description, scene_object_info):
     prompt += "Please generate a corresponding task based on each template. The tasks must comply with common sense and rules to avoid tasks such as pick up the bed. \n"
     prompt += "Note that as a robot assistant, you only have visual abilities and no tactile, hearing or other abilities. Therefore, you can only see the color, size, shape and other information of the cushions, but cannot judge whether the cushions are soft or new or old. \n"
     prompt += "After you generate a task, use diverse language but be precise in your description. For example: Tell me the number of the green vases; Please go to the green cushion. \n"
+    prompt += "For each task, four options are generated for me, including one correct answer and three incorrect answers, and indicate which is the correct option. \n"
     prompt += "For each generated task, you need to specify the number of the object in the task at the end. \n"
-    prompt += "For each task, four options A, B, C, and D are generated for me, including one correct answer and three incorrect answers, and indicate which is the correct option. \n"
+    prompt += "If the scene description and the information I give you do not have reliable information about features such as color, shape, etc., do not ask questions about these issues, as this will lead to unreliable questions and answers. \n"
     prompt += "Please follow the following format for your answer: \n"
-    prompt += "Template:Count the number of {object}. \n"
-    prompt += "Task:Tell me the number of the cups on the table. \n"
-    prompt += "A:1. \n"
-    prompt += "B:2. \n"
-    prompt += "C:3. \n"
-    prompt += "D:4. \n"
-    prompt += "Right Answer:{B} \n"
-    prompt += "Object Number:{37,45,64}"
+    prompt += "Template: Count the number of {object}. \n"
+    prompt += "Task: Tell me the number of the cups on the table. \n"
+    prompt += "A: 1 \n"
+    prompt += "B: 2 \n"
+    prompt += "C: 3 \n"
+    prompt += "D: 4 \n"
+    prompt += "Right Answer:B \n"
+    prompt += "Object Number:37,45 \n"
 
     print("\n\n" + prompt + "\n\n")
 

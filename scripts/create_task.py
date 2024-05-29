@@ -12,7 +12,6 @@ from scripts.get_object_info import (
     get_scene_object_info,
     get_ego_object_list,
     get_scene_object_info_new,
-    get_object_category,
 )
 from scripts.prompt_create_task import (
     scene_to_description,
@@ -106,6 +105,7 @@ try:
         print("\n\n" + tasks + "\n\n")
         store_json(tasks, f"{absolute_path}/task.json")
 
+        store_json(scene, f"{absolute_path}/scene.json")
         print(f"\n\nscene {i} finished\n\n")
 finally:
     env.close()
