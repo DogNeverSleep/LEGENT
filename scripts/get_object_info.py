@@ -40,14 +40,14 @@ def get_scene_object_info_new(scene):
     instances = scene["instances"]
     object_info = {}  # 场景的所有物体信息
     room_object_info = {}  # 房间的物体信息
-    index = 0  # 物体索引 scene["instances"]中第index个物体
     for dic in instances:
-        if dic["category"] == "door":
-            index += 1
+        if dic["category"] == "door":  # 不统计门
             continue
-        objectt_room = dic["room_type"]  # 物体所在房间
-        room_object_info[objectt_room] = room_object_info.get(objectt_room, [])
-        room_object_info[objectt_room].append(index)
+        if "room_type" not in dic:  # 场景中的物体
+            continue
+        object_room = dic["room_type"]  # 物体所在房间
+        room_object_info[object_room] = room_object_info.get(object_room, [])
+        room_object_info[object_room].append(dic["index"])  # 对房间的物体进行索引
         if "description" not in dic:  # 旧的物体
             object_category, object_description = origin_object_name_description[
                 dic["prefab"]
@@ -55,8 +55,7 @@ def get_scene_object_info_new(scene):
         else:  # 新的物体
             object_category = dic["category"]
             object_description = dic["description"]
-        object_info[index] = [object_category, object_description]
-        index += 1
+        object_info[dic["index"]] = [object_category, object_description]
     return (
         object_info,
         room_object_info,
