@@ -21,8 +21,8 @@ from scripts.prompt_create_task import (
 )
 import pandas as pd
 
-scene_index = 4  # 场景编号
-option = 2  # 1:仅拍照 2:拍照+生成任务
+scene_index = 9  # 场景编号
+option = 1  # 1:仅拍照 2:拍照+生成任务
 
 scene_json = f"/Users/frank/Code/LEGENT/TASK/scene/packed_77_scenes_20240607-124050-071183/scene_{scene_index}.json"  # 场景路径
 
@@ -41,11 +41,11 @@ try:
             scene = json.load(file)
         print(f"\n\nscene loaded\n\n")
 
-        position = [3.8, 2.6, 4.4]
-        rotation = [50, -135, 0]
+        # position = [3.8, 2.6, 4.4]
+        # rotation = [50, -135, 0]
 
-        # position = [0.2, 2.5, 0.2]
-        # rotation = [50, 45, 0]
+        position = [0.2, 2.5, 0.2]
+        rotation = [50, 45, 0]
 
         photo_path = f"{save_folder}/photo.png"  # 图片路径
         obs = env.reset(
@@ -66,35 +66,35 @@ try:
         )
         print(f"\n\nphoto taken\n\n")
 
-        if option == 2:
-            object_info, room_object_info = get_scene_object_info_new(
-                scene
-            )  # 场景中的所有物体信息 dic{index:category}
-            store_json(object_info, f"{save_folder}/scene_object_info.json")
-            store_json(room_object_info, f"{save_folder}/room_object_info.json")
+        object_info, room_object_info = get_scene_object_info_new(
+            scene
+        )  # 场景中的所有物体信息 dic{index:category}
+        store_json(object_info, f"{save_folder}/scene_object_info.json")
+        store_json(room_object_info, f"{save_folder}/room_object_info.json")
 
-            print("\n\nstart to generate scene description\n\n")
-            scene_description = scene_to_description(
-                save_folder, object_info, room_object_info
-            )  # 场景描述
-            print("\n\n--------------scene_description--------------")
-            print(scene_description)
+        # if option == 2:
+        #     print("\n\nstart to generate scene description\n\n")
+        #     scene_description = scene_to_description(
+        #         save_folder, object_info, room_object_info
+        #     )  # 场景描述
+        #     print("\n\n--------------scene_description--------------")
+        #     print(scene_description)
 
-            print("\n\nstart to generate task\n\n")
-            task_QA = description_to_task_QA(
-                scene_description, object_info, room_object_info
-            )  # 生成QA类任务
-            tasks_action = description_to_task_action(
-                scene_description, object_info, room_object_info
-            )  # 生成执行类任务
+        #     print("\n\nstart to generate task\n\n")
+        #     task_QA = description_to_task_QA(
+        #         scene_description, object_info, room_object_info
+        #     )  # 生成QA类任务
+        #     tasks_action = description_to_task_action(
+        #         scene_description, object_info, room_object_info
+        #     )  # 生成执行类任务
 
-            print("\n\n-------------TASK QA-------------")
-            print(task_QA)
-            print("\n\n-------------TASK ACTION-------------")
-            print(tasks_action)
+        #     print("\n\n-------------TASK QA-------------")
+        #     print(task_QA)
+        #     print("\n\n-------------TASK ACTION-------------")
+        #     print(tasks_action)
 
-            store_json(task_QA, f"{save_folder}/task_QA.json")
-            store_json(tasks_action, f"{save_folder}/task_action.json")
+        #     store_json(task_QA, f"{save_folder}/task_QA.json")
+        #     store_json(tasks_action, f"{save_folder}/task_action.json")
 
         print(f"\n\nscene {i} finished\n\n")
 finally:
