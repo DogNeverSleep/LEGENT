@@ -178,3 +178,4 @@ test_dataset/
 scene_test/
 .DS_Store
 TASK
+scripts/pack_unpack.py
