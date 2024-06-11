@@ -176,3 +176,4 @@ docs/**/index.md
 TASK
 scripts/gpt_api.py
 .DS_Store
+scripts/pack_unpack.py
