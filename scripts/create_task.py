@@ -21,13 +21,8 @@ from scripts.prompt_create_task import (
 )
 import pandas as pd
 
-scene_index = 9  # 场景编号
+# scene_index = 9  # 场景编号
 option = 1  # 1:仅拍照 2:拍照+生成任务
-
-scene_json = f"/Users/frank/Code/LEGENT/TASK/scene/packed_77_scenes_20240607-124050-071183/scene_{scene_index}.json"  # 场景路径
-
-save_folder = f"/Users/frank/Code/LEGENT/TASK/task/packed_77_scenes_20240607-124050-071183/scene_{scene_index}"  # 生成任务文件夹路径
-os.makedirs(save_folder, exist_ok=True)
 
 env = Environment(env_path="auto")
 
@@ -35,7 +30,12 @@ task_num = 1  # 任务编号
 
 
 try:
-    for i in range(task_num, task_num + 1):
+    for i in range(0, 10):
+
+        scene_json = f"/Users/frank/Code/LEGENT/TASK/scene/two_rooms_10_scenes/scene_{i}.json"  # 场景路径
+        save_folder = f"/Users/frank/Code/LEGENT/TASK/task/two_rooms_10_scenes/scene_{i}"  # 生成任务文件夹路径
+        os.makedirs(save_folder, exist_ok=True)
+
         # 载入事先构造好的场景
         with open(scene_json, "r", encoding="utf-8") as file:
             scene = json.load(file)

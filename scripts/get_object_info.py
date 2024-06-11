@@ -41,8 +41,6 @@ def get_scene_object_info_new(scene):
     object_info = {}  # 场景的所有物体信息
     room_object_info = {}  # 房间的物体信息
     for dic in instances:
-        if dic["category"] == "door":  # 不统计门
-            continue
         if "room_type" not in dic:  # 场景中的物体
             continue
         object_room = dic["room_type"]  # 物体所在房间

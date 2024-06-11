@@ -93,11 +93,54 @@ def pack_scenes(scenes: List):
     files_to_zip = set()
     for i, scene in enumerate(scenes):
         for instance in scene["instances"]:
-            if os.path.exists(instance["prefab"]):
-                files_to_zip.add(instance["prefab"])
+            if "material" in instance:
+                if os.path.exists(instance["material"]):
+                    files_to_zip.add(instance["material"])
+                else:
+                    log(f"Warning: material {instance['material']} not found")
+                    raise FileNotFoundError
+            if instance["source"] == "built-in":
+                continue
+            else:
+                if os.path.exists(instance["prefab"]):
+                    files_to_zip.add(instance["prefab"])
+                else:
+                    log(f"Warning: prefab {instance['prefab']} not found")
+                    raise FileNotFoundError
+
+                # for procthor assets
+                if "mesh_materials" in instance:
+                    for mesh in instance["mesh_materials"]:
+                        for material in mesh["materials"]:
+                            for map in [
+                                "base_map",
+                                "metallic_map",
+                                "normal_map",
+                                "height_map",
+                                "occulusion_map",
+                                "emission_map",
+                                "detail_mask_map",
+                                "detail_base_map",
+                                "detail_normal_map",
+                            ]:
+                                if material[map]:
+                                    if os.path.exists(material[map]):
+                                        files_to_zip.add(material[map])
+                                    else:
+                                        log(
+                                            f"Warning: material {material[map]} not found"
+                                        )
+                                        raise FileNotFoundError
+
         for instance in scene["floors"] + scene["walls"]:
             if "material" in instance and os.path.exists(instance["material"]):
                 files_to_zip.add(instance["material"])
+            else:
+                log(f"Warning: material not found")
+                raise FileNotFoundError
+        skybox = scene["skybox"]["map"]
+        if os.path.exists(skybox):
+            files_to_zip.add(skybox)
 
     # To prevent the occurrence of files with the same name.
     dup_name_count = {}
@@ -133,10 +176,36 @@ def pack_scenes(scenes: List):
             for instance in scene["instances"]:
                 if os.path.exists(instance["prefab"]):
                     instance["prefab"] = path_to_unique_name[instance["prefab"]]
+                if "material" in instance:
+                    if os.path.exists(instance["material"]):
+                        instance["material"] = path_to_unique_name[instance["material"]]
+                # for procthor assets
+                if "mesh_materials" in instance:
+                    for mesh in instance["mesh_materials"]:
+                        for material in mesh["materials"]:
+                            for map in [
+                                "base_map",
+                                "metallic_map",
+                                "normal_map",
+                                "height_map",
+                                "occulusion_map",
+                                "emission_map",
+                                "detail_mask_map",
+                                "detail_base_map",
+                                "detail_normal_map",
+                            ]:
+                                if material[map]:
+                                    if os.path.exists(material[map]):
+                                        material[map] = path_to_unique_name[
+                                            material[map]
+                                        ]
+
             for instance in scene["floors"] + scene["walls"]:
                 if "material" in instance and os.path.exists(instance["material"]):
                     instance["material"] = path_to_unique_name[instance["material"]]
-
+            skybox = scene["skybox"]["map"]
+            if os.path.exists(skybox):
+                scene["skybox"]["map"] = path_to_unique_name[skybox]
             store_json(scene, temp_file)
             zipf.write(temp_file, arcname=f"scene_{i}_relative.json")
     os.remove(temp_file)
@@ -162,14 +231,59 @@ def unpack_scenes(input_file: str, get_scene_id: int = -1):
         scene = load_json(os.path.join(dir, f"scene_{i}_relative.json"))
 
         for instance in scene["instances"]:
-            new_path = f"{dir}/{instance['prefab']}"
-            if os.path.exists(new_path):
-                instance["prefab"] = new_path
+            if "material" in instance:
+                new_path = f"{dir}/{instance['material']}"
+                if os.path.exists(new_path):
+                    instance["material"] = new_path
+                else:
+                    log(f"Warning: material {instance['material']} not found")
+                    raise FileNotFoundError
+            if "source" in instance and instance["source"] == "built-in":
+                continue
+            else:
+                new_path = f"{dir}/{instance['prefab']}"
+                if os.path.exists(new_path):
+                    instance["prefab"] = new_path
+                else:
+                    log(f"Warning: prefab {instance['prefab']} not found")
+
+                # for procthor assets
+                if "mesh_materials" in instance:
+                    for mesh in instance["mesh_materials"]:
+                        for material in mesh["materials"]:
+                            for map in [
+                                "base_map",
+                                "metallic_map",
+                                "normal_map",
+                                "height_map",
+                                "occulusion_map",
+                                "emission_map",
+                                "detail_mask_map",
+                                "detail_base_map",
+                                "detail_normal_map",
+                            ]:
+                                if material[map]:
+                                    new_path = f"{dir}/{material[map]}"
+                                    if os.path.exists(new_path):
+                                        material[map] = new_path
+                                    else:
+                                        log(
+                                            f"Warning: material {material[map]} not found"
+                                        )
+                                        raise FileNotFoundError
+
         for instance in scene["floors"] + scene["walls"]:
             if "material" in instance:
                 new_path = f"{dir}/{instance['material']}"
                 if os.path.exists(new_path):
                     instance["material"] = new_path
+                else:
+                    log(f"Warning: material {new_path} not found")
+                    raise FileNotFoundError
+        skybox = scene["skybox"]["map"]
+        new_path = f"{dir}/{skybox}"
+        if os.path.exists(new_path):
+            scene["skybox"]["map"] = new_path
         store_json(scene, os.path.join(dir, f"scene_{i}.json"))
         scenes.append(scene)
     if get_scene_id != -1:
@@ -269,6 +383,4 @@ class SSHTunnel:
         self.ssh_client.close()
 
 
-unpack_scenes(
-    "/Users/frank/Code/LEGENT/TASK/scene/packed_77_scenes_20240607-124050-071183.zip"
-)
+unpack_scenes("/Users/frank/Code/LEGENT/TASK/scene/two_rooms_10_scenes.zip")
