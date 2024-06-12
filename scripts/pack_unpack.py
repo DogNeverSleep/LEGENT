@@ -383,4 +383,4 @@ class SSHTunnel:
         self.ssh_client.close()
 
 
-unpack_scenes("/Users/frank/Code/LEGENT/TASK/scene/two_rooms_10_scenes.zip")
+unpack_scenes("/Users/frank/Code/LEGENT/TASK/scene/one_room_2_scenes.zip")

@@ -179,3 +179,4 @@ scene_test/
 .DS_Store
 TASK
 scripts/pack_unpack.py
+scripts/pack_unpack.py
