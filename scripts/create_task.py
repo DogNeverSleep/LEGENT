@@ -30,10 +30,10 @@ task_num = 1  # 任务编号
 
 
 try:
-    for i in range(0, 10):
+    for i in range(0, 2):
 
-        scene_json = f"/Users/frank/Code/LEGENT/TASK/scene/two_rooms_10_scenes/scene_{i}.json"  # 场景路径
-        save_folder = f"/Users/frank/Code/LEGENT/TASK/task/two_rooms_10_scenes/scene_{i}"  # 生成任务文件夹路径
+        scene_json = f"/Users/frank/Code/LEGENT/TASK/scene/one_room_2_scenes/scene_{i}.json"  # 场景路径
+        save_folder = f"/Users/frank/Code/LEGENT/TASK/task/one_room_2_scenes/scene_{i}"  # 生成任务文件夹路径
         os.makedirs(save_folder, exist_ok=True)
 
         # 载入事先构造好的场景
